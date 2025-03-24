@@ -1,6 +1,6 @@
 # Blutdruckanalyse
 
-Dieses Projekt visualisiert und analysiert Blutdruck- und Pulsmessdaten aus der CSV-Datei [puls_data.csv](//PythonProjects/blutdruck/puls_data.csv).
+Dieses Projekt visualisiert und analysiert Blutdruck- und Pulsmessdaten aus der CSV-Datei [./puls_data.csv](puls_data.csv).
 
 ## Inhalt
 
