@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from matplotlib.gridspec import GridSpec
 import numpy as np
+import os
 
 # Reading data from puls_data.csv
 df = pd.read_csv('/Users/haraldbeker/PythonProjects/blutdruck/puls_data.csv')
@@ -96,7 +97,9 @@ fig.suptitle('Blutdruckanalyse', fontsize=16, y=0.98)
 
 # Update figure size to 12x8 inches
 
-plt.savefig('/Users/haraldbeker/PythonProjects/blutdruck/combined_plot.pdf', bbox_inches='tight')
+home_dir = os.path.expanduser("~")
+
+plt.savefig(os.path.join(home_dir, 'PythonProjects/blutdruck/combined_plot.pdf'), bbox_inches='tight')
 plt.savefig('/Users/haraldbeker/PythonProjects/blutdruck/combined_plot.png', dpi=300, bbox_inches='tight')
 plt.show()
 
@@ -116,6 +119,7 @@ styled_table_df.to_html('/Users/haraldbeker/PythonProjects/blutdruck/blutdruck_t
 
 from weasyprint import HTML
 import webbrowser
+import os
 # HTML-Datei in PDF umwandeln
 html = HTML('/Users/haraldbeker/PythonProjects/blutdruck/blutdruck_table.html')
 html.write_pdf('/Users/haraldbeker/PythonProjects/blutdruck/blutdruck_table.pdf')
