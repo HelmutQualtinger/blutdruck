@@ -11,17 +11,17 @@ df = pd.read_csv('/Users/haraldbeker/PythonProjects/blutdruck/puls_data.csv')
 
 # Creating DataFrame
 # %%
-# print(df.dtypes)
+# convert columns to stringS otherwise datetime conversion will fail
 df['Datum'] = df['Datum'].astype(str)
 df['Uhrzeit'] = df['Uhrzeit'].astype(str)
 table_df = df.copy()
-# Datum und Uhrzeit kombinieren und in datetime umwandeln
+#combine date and time columns to a single datetime column recognized by pandas and matplotlib
 df['Datum_Uhrzeit'] = pd.to_datetime("2025 " + df['Datum'] + ' ' + df['Uhrzeit'], format='%Y %d.%m %H:%M')
 
 # Set up the figure with subplots
 plt.style.use('seaborn-v0_8-whitegrid')
 fig = plt.figure(figsize=(12, 8))
-gs = GridSpec(2, 1, height_ratios=[2, 1], hspace=0.3)
+gs = GridSpec(2, 1, height_ratios=[1, 1], hspace=0.3)
 
 # Time series plot (top subplot)
 ax1 = fig.add_subplot(gs[0])
@@ -30,13 +30,13 @@ ax1.plot(df['Datum_Uhrzeit'], df['Diastolisch'], 's--', color='green', linewidth
 ax1.plot(df['Datum_Uhrzeit'], df['Pulse'], '^:', color='red', linewidth=1, label='Puls')
 
 # Reference lines
-# Reference lines
 for y_val in [80, 90, 120, 140]:
     ax1.axhline(y=y_val, color='black', linestyle='-', linewidth=1)
 
 # Add light green bands for normal ranges
 ax1.axhspan(80, 90, facecolor='lightgreen', alpha=0.3)
 ax1.axhspan(120, 140, facecolor='lightgreen', alpha=0.3)
+
 # Set y-ticks every 5 units
 y_min, y_max = ax1.get_ylim()
 ax1.set_yticks(np.arange(np.floor(y_min / 5) * 5, np.ceil(y_max / 5) * 5 + 1, 5))
@@ -62,7 +62,7 @@ mean_pulse = df['Pulse'].mean()
 
 # Create histograms
 bins = np.arange(min(df['Pulse'].min(), df['Diastolisch'].min(), df['Systolisch'].min()) - 5,
-                 df['Systolisch'].max() + 5, 2)
+                 df['Systolisch'].max() + 5, 5)
 
 ax2.hist(df['Systolisch'], bins=bins, alpha=0.5, color='blue', label='Systolisch')
 ax2.hist(df['Diastolisch'], bins=bins, alpha=0.5, color='green', label='Diastolisch')
@@ -74,11 +74,11 @@ ax2.axvline(mean_diastolisch, color='cyan', linestyle='-', linewidth=2)
 ax2.axvline(mean_pulse, color='red', linestyle='-', linewidth=2)
 
 # Add text for means
-ax2.text(mean_systolisch + 1, ax2.get_ylim()[1] * 0.95, f'⌀ Systolisch: {mean_systolisch:.1f}', 
+ax2.text(mean_systolisch - 1, ax2.get_ylim()[1] * 0.95, f'⌀ Systolisch: {mean_systolisch:.1f}', 
          color='blue', fontweight='bold')
-ax2.text(mean_diastolisch + 1, ax2.get_ylim()[1] * 0.85, f'⌀ Diastolisch: {mean_diastolisch:.1f}', 
+ax2.text(mean_diastolisch - 1, ax2.get_ylim()[1] * 0.95, f'⌀ Diastolisch: {mean_diastolisch:.1f}', 
          color='green', fontweight='bold')
-ax2.text(mean_pulse + 1, ax2.get_ylim()[1] * 0.75, f'⌀ Puls: {mean_pulse:.1f}', 
+ax2.text(mean_pulse - 1, ax2.get_ylim()[1] * 0.95, f'⌀ Puls: {mean_pulse:.1f}', 
          color='red', fontweight='bold')
 
 # Reference lines for normal ranges
