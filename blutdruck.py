@@ -70,7 +70,7 @@ ax1.set_title('Blutdruck und Pulse im Zeitverlauf', fontsize=14)
 ax1.set_xlabel('Datum')
 ax1.set_ylabel('mmHg / Puls') # Adjust label if needed
 ax1.grid(True)
-ax1.legend(loc='upper left')
+ax1.legend(loc='center left', frameon=False, fontsize=10)
 
 # Histogram plot (bottom subplot)
 ax2 = fig.add_subplot(gs[1])
@@ -84,10 +84,10 @@ mean_pulse = df['Pulse'].mean()
 # Adjust bins to be more appropriate for the data ranges
 min_val = df[['Systolisch', 'Diastolisch', 'Pulse']].min().min()
 max_val = df[['Systolisch', 'Diastolisch', 'Pulse']].max().max()
-bins = np.arange(min_val - 5, max_val + 10, 5) # Use step of 5, ensure range covers max+5
+bins = np.arange(min_val - 5, max_val + 10, 2) # Use step of 5, ensure range covers max+5
 
-ax2.hist(df['Systolisch'], bins=bins, alpha=0.6, color='blue', label='Systolisch', edgecolor='black')
-ax2.hist(df['Diastolisch'], bins=bins, alpha=0.6, color='green', label='Diastolisch', edgecolor='black')
+ax2.hist(df['Systolisch'], bins=bins, alpha=0.4, color='blue', label='Systolisch', edgecolor='black')
+ax2.hist(df['Diastolisch'], bins=bins, alpha=0.4, color='green', label='Diastolisch', edgecolor='black')
 ax2.hist(df['Pulse'], bins=bins, alpha=0.4, color='red', label='Puls', edgecolor='black')
 
 # Add vertical lines for means
