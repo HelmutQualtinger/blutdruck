@@ -59,7 +59,54 @@ def clean_df(df):
     df['Uhrzeit'] = df['Uhrzeit'].astype(str)
     #combine date and time columns to a single datetime column recognized by pandas and matplotlib
     df['Datum_Uhrzeit'] = pd.to_datetime("2025 " + df['Datum'] + ' ' + df['Uhrzeit'], format='%Y %d.%m %H:%M')
+    
     return df
+
+
+def read_data_from_mysql(db_config):
+    """
+    Reads data from the 'Heart' table in the 'Health' database on a MySQL server.
+
+    Parameters:
+        db_config (dict): A dictionary containing the database connection configuration.
+                           Expected keys: 'host', 'user', 'password'.
+
+    Returns:
+        pandas.DataFrame or None: A DataFrame containing the data from the 'Heart' table,
+                                  or None if an error occurs.
+    """
+    try:
+        import mysql.connector
+        conn = mysql.connector.connect(**db_config, database="Health")
+        if not conn.is_connected():
+            print("Failed to connect to the database.")
+            return None
+        query = "SELECT timestamp, systolic, diastolic, heart_rate FROM Heart ORDER BY timestamp ASC"
+        df = pd.read_sql(query, conn)
+        df.rename(columns={'timestamp': 'Datum_Uhrzeit', 'systolic': 'Systolisch', 'diastolic': 'Diastolisch', 'heart_rate': 'Pulse'}, inplace=True)
+        print("Data successfully read from MySQL.")
+        split_datetime(df)
+        
+        return df
+    except mysql.connector.Error as err:
+        print(f"Error reading from MySQL: {err}")
+        return None
+    finally:
+        if 'conn' in locals() and conn.is_connected():
+            conn.close()
+
+def split_datetime(df):
+    """
+    Splits the 'Datum_Uhrzeit' column into separate 'Datum' and 'Uhrzeit' columns.
+
+    Parameters:
+        df (pandas.DataFrame): The DataFrame containing the 'Datum_Uhrzeit' column.
+
+    Returns:
+        pandas.DataFrame: The DataFrame with the new 'Datum' and 'Uhrzeit' columns.
+    """
+    df['Datum'] = df['Datum_Uhrzeit'].dt.strftime('%d.%m')
+    df['Uhrzeit'] = df['Datum_Uhrzeit'].dt.strftime('%H:%M')
 
 
 def plot_data(df):
@@ -360,12 +407,18 @@ def  print_table(df):
         # Fallback or alternative browser logic if needed
 
 # Prepare datetime column
-df = read_csv_file(csv_path)
+# df = read_csv_file(csv_path)
+from DB_credentials import db_config
+df = read_data_from_mysql(db_config)
+
 table_df = df.copy()  # Use a deep copy of the DataFrame for the table outputs
 table_df['Datum'] = df['Datum'].astype(str)
 table_df = table_df.rename(columns={'Systolisch': 'Syst.'})
 table_df = table_df.rename(columns={'Diastolisch': 'Diast.'})
 df = clean_df(df)
+# Show all rows and columns in the console
+with pd.option_context('display.max_rows', None, 'display.max_columns', None):
+    print(df)
 # Plot data
 plot_data(df)
 # Print table

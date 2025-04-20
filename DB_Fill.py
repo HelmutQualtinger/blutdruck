@@ -1,8 +1,8 @@
 import csv
 import mysql.connector
-import os
-import os
-from datetime import datetime # Import the datetime module
+from DB_credentials import db_config # Import the DB-credentials module
+from datetime import datetime  # Import the datetime module
+import os  # Import os module for file path handling
 
 def create_database_and_table(db_config):
     """Creates the 'Health' database and 'Heart' table if they don't exist."""
@@ -51,7 +51,7 @@ def copy_csv_to_mysql(db_config, csv_file):
         cursor = conn.cursor()
 
         insert_query = """
-            INSERT INTO Heart (timestamp, systolic, diastolic, heart_rate)
+            INSERT INTO Heart (timestamp, systolic, diastolic, heart_rate) 
             VALUES (%s, %s, %s, %s)
         """
         records_to_insert = []
@@ -65,7 +65,7 @@ def copy_csv_to_mysql(db_config, csv_file):
             for i, row in enumerate(csv_data):
                 try:
                     # Ensure row has the expected number of columns
-                    if len(row) == 5:
+                    if len(row) == 5: 
                         date_str, time_str, systolic_str, diastolic_str, heart_rate_str = row
 
                         # --- Date/Time Parsing ---
@@ -85,12 +85,12 @@ def copy_csv_to_mysql(db_config, csv_file):
 
                         records_to_insert.append((mysql_timestamp, systolic, diastolic, heart_rate))
                     else:
-                         print(f"Skipping row {i+1}: Unexpected number of columns ({len(row)}). Content: {row}")
+                        print(f"Skipping row {i+1}: Unexpected number of columns ({len(row)}). Content: {row}")
 
                 except ValueError as ve:
                     print(f"Skipping row {i+1} due to parsing error: {ve}. Row content: {row}")
                 except Exception as e:
-                     print(f"Skipping row {i+1} due to unexpected error: {e}. Row content: {row}")
+                    print(f"Skipping row {i+1} due to unexpected error: {e}. Row content: {row}")
 
 
         if records_to_insert:
@@ -122,7 +122,7 @@ csv_file = os.path.join(script_dir, "puls_data.csv")
 
 # Check if CSV exists before proceeding
 if not os.path.exists(csv_file):
-     print(f"CRITICAL ERROR: CSV file not found at {csv_file}")
+    print(f"CRITICAL ERROR: CSV file not found at {csv_file}")
 else:
     create_database_and_table(db_config)
     copy_csv_to_mysql(db_config, csv_file)
