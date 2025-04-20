@@ -157,7 +157,7 @@ def plot_data(df):
             y=mean,
             text=f"⌀ {metric[0:4]}: {mean:.1f}",
             showarrow=False,
-            font=dict(color=color, size=12),
+            font=dict(color=color, size=12, family="Arial"),
             xanchor="left",
             yanchor="middle",
             bgcolor="white",
@@ -202,7 +202,7 @@ def plot_data(df):
         )
 
     fig.update_yaxes(title_text="mmHg / Puls", row=1, col=1)
-    fig.update_xaxes(title_text="Datum", row=1, col=1, tickformat="%d.%m", tickangle=45)
+    fig.update_xaxes(title_text="Datum", row=1, col=1, tickformat="%d.%m", tickangle=20)
 
 
     # Show grid for histograms (row 2)
