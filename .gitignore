@@ -7,3 +7,5 @@ blutdruck_table.pdf
 blutdruck_protocol.md
 blutdruck_table.html
 DB_credentials.py
+*.png
+*.html

@@ -415,6 +415,11 @@ table_df = df.copy()  # Use a deep copy of the DataFrame for the table outputs
 table_df['Datum'] = df['Datum'].astype(str)
 table_df = table_df.rename(columns={'Systolisch': 'Syst.'})
 table_df = table_df.rename(columns={'Diastolisch': 'Diast.'})
+table_df = table_df.rename(columns={'Pulse': 'Puls'})
+table_df.drop(columns=['Datum_Uhrzeit'], inplace=True)  # Drop the original datetime column
+# Reorder columns to put 'Datum' and 'Uhrzeit' at the beginning
+table_df = table_df[['Datum', 'Uhrzeit', 'Syst.', 'Diast.', 'Puls']]
+
 df = clean_df(df)
 # Show all rows and columns in the console
 with pd.option_context('display.max_rows', None, 'display.max_columns', None):
@@ -422,7 +427,7 @@ with pd.option_context('display.max_rows', None, 'display.max_columns', None):
 # Plot data
 plot_data(df)
 # Print table
-print_table(df)
+print_table(table_df)
 # Show all rows and columns in the console
 with pd.option_context('display.max_rows', None, 'display.max_columns', None):
     print(table_df)

@@ -20,7 +20,7 @@ def create_database_and_table(db_config):
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS Heart (
                 id INT AUTO_INCREMENT PRIMARY KEY,
-                timestamp DATETIME, # Changed to DATETIME for potentially better handling without timezone issues
+                timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, # Changed to DATETIME for potentially better handling without timezone issues
                 systolic INT,
                 diastolic INT,
                 heart_rate INT
