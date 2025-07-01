@@ -1,13 +1,14 @@
 # %%
 import pandas as pd
 import plotly.graph_objs as go
-import plotly.subplots as sp
+
 import numpy as np
 import os
 from weasyprint import HTML, CSS
 import webbrowser
 from plotly.subplots import make_subplots
 from datetime import timedelta
+from DB_credentials import db_config
 # Reading data from puls_data.csv
 output_dir = '/Users/haraldbeker/PythonProjects/blutdruck/' # Define output directory
 csv_path = 'puls_data.csv'
@@ -387,8 +388,7 @@ def  print_table(df):
         # Use absolute paths for webbrowser
         abs_html_path = os.path.abspath(html_file_path)
         abs_pdf_path = os.path.abspath(pdf_file_path)
-        abs_plot_pdf_path = os.path.abspath(plot_pdf_path)
-        abs_markdown_path = os.path.abspath(markdown_file_path) # Added markdown path
+
 
         # Open files (adjust browser if needed)
         browser = webbrowser.get("safari") # Or use webbrowser.open() for default browser
@@ -408,7 +408,7 @@ def  print_table(df):
 
 # Prepare datetime column
 # df = read_csv_file(csv_path)
-from DB_credentials import db_config
+
 df = read_data_from_mysql(db_config)
 
 table_df = df.copy()  # Use a deep copy of the DataFrame for the table outputs
